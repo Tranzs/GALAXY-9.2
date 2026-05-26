@@ -1,0 +1,1108 @@
+:root {
+  --cyan: #7df9ff;
+  --blue: #4fa6ff;
+  --pink: #ff61d8;
+  --gold: #ffd166;
+  --green: #7cffb2;
+  --panel: rgba(8, 19, 35, 0.66);
+  --panel-strong: rgba(7, 18, 32, 0.88);
+  --frame: #07111f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background: #02050d;
+  color: #dffbff;
+  font-family: "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.ship-screen {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(244, 172, 255, 0.32), transparent 21%),
+    radial-gradient(circle at 66% 37%, rgba(88, 226, 255, 0.22), transparent 18%),
+    radial-gradient(circle at 32% 46%, rgba(255, 201, 116, 0.16), transparent 16%),
+    linear-gradient(135deg, #03040d 0%, #08162b 45%, #050711 100%);
+}
+
+#starfield,
+.nebula-layer,
+.fog-layer,
+.warp-flash,
+.scan-beam,
+.blackhole-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#starfield {
+  z-index: 1;
+}
+
+.blackhole-video {
+  position: fixed;
+  inset: 0;
+  z-index: 44;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+  background: #000;
+}
+
+.blackhole-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  transform: scale(1.12);
+  filter: contrast(1.08) saturate(1.15) brightness(0.92);
+}
+
+.blackhole-mode .blackhole-video {
+  opacity: 1;
+}
+
+.nebula-layer {
+  z-index: 2;
+  opacity: 0.84;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(255, 226, 165, 0.45) 0 4%, rgba(255, 103, 196, 0.2) 10%, transparent 30%),
+    radial-gradient(ellipse at 40% 53%, rgba(92, 209, 255, 0.24), transparent 28%),
+    linear-gradient(100deg, transparent 0 20%, rgba(228, 168, 255, 0.12), rgba(112, 216, 255, 0.15), transparent 82%);
+  filter: blur(0.4px) saturate(1.35);
+  transform: rotate(-4deg) scale(1.08);
+}
+
+.fog-layer {
+  z-index: 7;
+  opacity: 0.7;
+  background:
+    radial-gradient(circle at var(--fog-x, 36%) var(--fog-y, 35%), transparent 0 18%, rgba(2, 6, 14, 0.36) 30%, rgba(2, 6, 14, 0.76) 70%),
+    linear-gradient(90deg, rgba(2, 5, 12, 0.66), transparent 28% 72%, rgba(2, 5, 12, 0.66));
+  transition: opacity 800ms ease, background 800ms ease;
+}
+
+.fog-layer.complete {
+  opacity: 0.12;
+}
+
+.warp-flash {
+  z-index: 50;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 45%, white 0 1%, rgba(125, 249, 255, 0.88) 3%, rgba(58, 102, 255, 0.34) 12%, transparent 38%);
+  transform: scale(0.22);
+  transform-origin: center;
+  filter: blur(0);
+  mix-blend-mode: screen;
+  will-change: opacity, transform, filter;
+}
+
+.warp-flash.active {
+  animation: warp 720ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.scan-beam {
+  z-index: 45;
+  opacity: 0;
+  background: linear-gradient(180deg, transparent, rgba(125, 249, 255, 0.34), transparent);
+  transform: translateY(-110%);
+}
+
+.scan-beam.active {
+  animation: scan 1050ms ease-out;
+}
+
+.blackhole-overlay {
+  z-index: 46;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 360ms ease;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(0, 0, 0, 0.92) 0 10%, rgba(0, 0, 0, 0.72) 16%, rgba(0, 0, 0, 0.25) 34%, transparent 56%),
+    radial-gradient(circle at 50% 48%, rgba(15, 40, 70, 0.45) 0 14%, transparent 44%),
+    radial-gradient(circle at 50% 48%, rgba(255, 97, 216, 0.08), transparent 55%);
+  filter: contrast(1.1) saturate(1.15);
+}
+
+.blackhole-overlay::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  background:
+    conic-gradient(from 0deg at 50% 48%,
+      rgba(255, 255, 255, 0) 0deg 18deg,
+      rgba(125, 249, 255, 0.12) 22deg 30deg,
+      rgba(255, 97, 216, 0.1) 36deg 44deg,
+      rgba(255, 255, 255, 0) 50deg 78deg,
+      rgba(79, 166, 255, 0.12) 82deg 94deg,
+      rgba(255, 209, 102, 0.08) 106deg 114deg,
+      rgba(255, 255, 255, 0) 120deg 180deg,
+      rgba(125, 249, 255, 0.1) 182deg 194deg,
+      rgba(255, 97, 216, 0.08) 214deg 222deg,
+      rgba(255, 255, 255, 0) 230deg 360deg);
+  transform: translateZ(0);
+  filter: blur(0.9px);
+  opacity: 0.95;
+}
+
+.blackhole-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(0, 0,  0, 0.98) 0 7%, rgba(0, 0, 0, 0.65) 12%, transparent 36%),
+    radial-gradient(circle at 50% 48%, transparent 0 14%, rgba(0, 0, 0, 0.7) 52%, rgba(0, 0, 0, 0.95) 82%);
+  mix-blend-mode: multiply;
+}
+
+.blackhole-overlay.active {
+  opacity: 1;
+}
+
+.blackhole-overlay.active::before {
+  animation: none;
+}
+
+.blackhole-overlay.active::after {
+  animation: blackholeSuck 1400ms cubic-bezier(0.2, 0.9, 0.2, 1) infinite;
+}
+
+.cockpit {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  perspective: 900px;
+}
+
+.cockpit::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  background:
+    linear-gradient(64deg, transparent 0 16%, rgba(5, 13, 24, 0.82) 16.5% 19%, transparent 19.7%),
+    linear-gradient(116deg, transparent 0 16%, rgba(5, 13, 24, 0.82) 16.5% 19%, transparent 19.7%),
+    linear-gradient(20deg, rgba(5, 13, 24, 0.98) 0 13%, transparent 13.6%),
+    linear-gradient(340deg, rgba(5, 13, 24, 0.98) 0 13%, transparent 13.6%),
+    linear-gradient(180deg, rgba(1, 4, 10, 0.78), transparent 14% 70%, rgba(1, 4, 10, 0.94));
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.9);
+}
+
+.cockpit-top {
+  position: fixed;
+  top: -2px;
+  left: 22%;
+  right: 22%;
+  z-index: 11;
+  height: 82px;
+  background: linear-gradient(180deg, rgba(5, 15, 27, 0.97), rgba(9, 25, 42, 0.68));
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+  border-bottom: 1px solid rgba(125, 249, 255, 0.26);
+  box-shadow: 0 20px 38px rgba(0, 0, 0, 0.55), inset 0 -10px 28px rgba(125, 249, 255, 0.06);
+}
+
+.window-frame {
+  position: fixed;
+  z-index: 12;
+  pointer-events: none;
+  background: linear-gradient(90deg, #030812, #152335 45%, #030812);
+  box-shadow: 0 0 20px rgba(125, 249, 255, 0.16), inset 0 0 18px rgba(0, 0, 0, 0.86);
+}
+
+.window-frame.left,
+.window-frame.right {
+  top: 8%;
+  width: 24px;
+  height: 62%;
+  border-radius: 18px;
+}
+
+.window-frame.left {
+  left: 23%;
+  transform: rotate(-24deg);
+}
+
+.window-frame.right {
+  right: 23%;
+  transform: rotate(24deg);
+}
+
+.window-frame.bottom-left,
+.window-frame.bottom-right {
+  bottom: 15%;
+  width: 26%;
+  height: 22px;
+}
+
+.window-frame.bottom-left {
+  left: 19%;
+  transform: rotate(-14deg);
+}
+
+.window-frame.bottom-right {
+  right: 19%;
+  transform: rotate(14deg);
+}
+
+.mission-title {
+  position: relative;
+  z-index: 20;
+  width: min(980px, calc(100% - 28px));
+  margin: 0 auto;
+  padding-top: 22px;
+  text-align: center;
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  text-shadow: 0 0 18px rgba(125, 249, 255, 0.85), 0 2px 0 rgba(0, 0, 0, 0.88);
+}
+
+.mission-title h1 {
+  margin: 0;
+  font-size: clamp(1.22rem, 3vw, 2rem);
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.mission-title p {
+  margin: 8px 0 0;
+  font-size: clamp(0.82rem, 2vw, 1.18rem);
+  font-weight: 700;
+}
+
+.mission-progress {
+  position: fixed;
+  top: 108px;
+  right: 24px;
+  z-index: 22;
+  min-width: 134px;
+  padding: 10px 12px;
+  border: 1px solid rgba(125, 249, 255, 0.35);
+  background: rgba(5, 17, 31, 0.58);
+  backdrop-filter: blur(10px);
+  color: var(--green);
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  font-size: 0.75rem;
+  text-align: center;
+  box-shadow: 0 0 24px rgba(124, 255, 178, 0.14);
+}
+
+.star-map {
+  position: absolute;
+  z-index: 35;
+  inset: 118px 6% 218px;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.star-node {
+  position: absolute;
+  z-index: var(--z, 10);
+  width: var(--node-width, 122px);
+  min-height: 78px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #dffbff;
+  cursor: pointer;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.78) translateZ(var(--depth));
+  transition: opacity 700ms ease, transform 700ms ease, filter 500ms ease;
+  pointer-events: none;
+}
+
+.star-node.unlocked {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.star-core,
+.star-core::before,
+.star-core::after,
+.star-name,
+.star-trait {
+  pointer-events: none;
+}
+
+.star-node.locked {
+  opacity: 0.16;
+  filter: grayscale(1) blur(1px);
+}
+
+.star-node:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 8px;
+}
+
+.star-core {
+  position: relative;
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, white 0 12%, var(--color) 28%, rgba(255, 255, 255, 0.12) 48%, transparent 68%);
+  box-shadow: 0 0 12px var(--color), 0 0 34px var(--color), 0 0 70px rgba(255, 255, 255, 0.3);
+  animation: pulse var(--twinkle, 2.8s) ease-in-out infinite;
+}
+
+.star-node:hover,
+.star-node:focus-visible {
+  z-index: 80;
+}
+
+.star-core::before,
+.star-core::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: calc(var(--size) * 2.7);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color), transparent);
+  transform: translate(-50%, -50%);
+  opacity: 0.72;
+}
+
+.star-core::after {
+  width: 2px;
+  height: calc(var(--size) * 2.7);
+}
+
+.star-node.variant-1 .star-core {
+  border-radius: 42% 58% 48% 52%;
+  background:
+    radial-gradient(circle at 35% 35%, #fff 0 10%, var(--color) 26%, rgba(255, 255, 255, 0.12) 58%, transparent 72%);
+}
+
+.star-node.variant-2 .star-core {
+  box-shadow: 0 0 12px var(--color), 0 0 26px var(--color), 0 0 0 7px rgba(255, 255, 255, 0.08), 0 0 72px var(--color);
+}
+
+.star-node.variant-3 .star-core::before {
+  width: calc(var(--size) * 3.5);
+  height: 3px;
+  transform: translate(-50%, -50%) rotate(-18deg);
+}
+
+.star-node.variant-4 .star-core {
+  background:
+    radial-gradient(circle, #fff 0 8%, var(--color) 24%, transparent 48%),
+    conic-gradient(from 20deg, transparent, rgba(255, 255, 255, 0.34), transparent, var(--color), transparent);
+}
+
+.star-node.variant-5 .star-core {
+  filter: saturate(1.45);
+}
+
+.star-nova .star-core {
+  clip-path: polygon(50% 0, 60% 34%, 98% 35%, 67% 56%, 80% 100%, 50% 72%, 20% 100%, 33% 56%, 2% 35%, 40% 34%);
+}
+
+.star-crystal .star-core {
+  border-radius: 18%;
+  transform: rotate(45deg);
+}
+
+.star-ring .star-core::before,
+.star-halo .star-core::before,
+.star-saturn .star-core::before,
+.star-portal .star-core::before {
+  width: calc(var(--size) * 2.35);
+  height: calc(var(--size) * 0.78);
+  border: 2px solid rgba(255, 255, 255, 0.42);
+  border-radius: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%) rotate(-18deg);
+}
+
+.star-flare .star-core {
+  clip-path: polygon(50% 0, 58% 30%, 86% 12%, 70% 42%, 100% 50%, 70% 58%, 86% 88%, 58% 70%, 50% 100%, 42% 70%, 14% 88%, 30% 58%, 0 50%, 30% 42%, 14% 12%, 42% 30%);
+}
+
+.star-diamond .star-core,
+.star-shield .star-core {
+  border-radius: 12%;
+  clip-path: polygon(50% 0, 100% 44%, 50% 100%, 0 44%);
+}
+
+.star-comet .star-core::before {
+  width: calc(var(--size) * 3.4);
+  height: calc(var(--size) * 0.7);
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), var(--color));
+  transform: translate(-82%, -50%) rotate(-16deg);
+}
+
+.star-binary .star-core::before {
+  width: calc(var(--size) * 0.68);
+  height: calc(var(--size) * 0.68);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 16%, var(--color) 42%, transparent 70%);
+  transform: translate(38%, -78%);
+}
+
+.star-ember .star-core {
+  border-radius: 52% 48% 48% 52% / 38% 42% 58% 62%;
+  background:
+    radial-gradient(circle at 35% 28%, #fff 0 9%, #ffd166 15%, var(--color) 42%, rgba(255, 70, 40, 0.24) 70%, transparent 76%);
+}
+
+.star-pinwheel .star-core {
+  border-radius: 50%;
+  background:
+    conic-gradient(from 30deg, #fff, var(--color), transparent 24%, #fff 26%, var(--color), transparent 52%, #fff 54%, var(--color), transparent 78%, #fff 80%, var(--color)),
+    radial-gradient(circle, #fff 0 12%, transparent 36%);
+}
+
+.star-planet .star-core {
+  background:
+    linear-gradient(160deg, transparent 36%, rgba(255, 255, 255, 0.36) 38% 42%, transparent 44%),
+    radial-gradient(circle at 38% 30%, #fff 0 10%, var(--color) 28%, rgba(255, 255, 255, 0.18) 62%, transparent 73%);
+}
+
+.star-spark .star-core {
+  clip-path: polygon(50% 0, 56% 39%, 95% 50%, 56% 61%, 50% 100%, 44% 61%, 5% 50%, 44% 39%);
+}
+
+.star-arrow .star-core {
+  clip-path: polygon(50% 0, 64% 35%, 100% 35%, 72% 58%, 82% 100%, 50% 76%, 18% 100%, 28% 58%, 0 35%, 36% 35%);
+}
+
+.star-moon .star-core {
+  background:
+    radial-gradient(circle at 62% 38%, rgba(2, 5, 13, 0.9) 0 32%, transparent 34%),
+    radial-gradient(circle at 40% 42%, #fff 0 11%, var(--color) 34%, rgba(255, 255, 255, 0.16) 70%, transparent 76%);
+}
+
+.star-sunrise .star-core {
+  clip-path: polygon(50% 0, 61% 32%, 95% 26%, 72% 53%, 91% 84%, 56% 72%, 50% 100%, 44% 72%, 9% 84%, 28% 53%, 5% 26%, 39% 32%);
+  background:
+    radial-gradient(circle, #fff 0 9%, #fff7b8 15%, var(--color) 44%, rgba(255, 151, 45, 0.18) 72%, transparent 78%);
+}
+
+.star-portal .star-core {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 0 20%, #fff 22% 28%, var(--color) 35%, rgba(255, 255, 255, 0.14) 62%, transparent 73%);
+}
+
+.teacher-star {
+  --node-width: 116px;
+  z-index: var(--z, 4);
+}
+
+.teacher-star .star-core {
+  width: 82px;
+  height: 82px;
+  margin-bottom: 12px;
+  background:
+    radial-gradient(circle at 34% 30%, #fff7d1 0 8%, #fff 9% 14%, #ffd166 25%, #ff8c2a 48%, rgba(255, 108, 44, 0.24) 68%, transparent 76%);
+  box-shadow:
+    0 0 22px #fff2a8,
+    0 0 56px #ffd166,
+    0 0 110px rgba(255, 140, 42, 0.9),
+    0 0 180px rgba(255, 97, 216, 0.34);
+  animation: sunPulse 3.8s ease-in-out infinite;
+}
+
+.teacher-star .star-core::before {
+  width: 138px;
+  height: 138px;
+  border: 2px solid rgba(255, 209, 102, 0.38);
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 209, 102, 0.52), transparent 32%, rgba(255, 97, 216, 0.32), transparent 72%);
+  animation: rotate 9s linear infinite;
+}
+
+.teacher-star .star-core::after {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 44%, rgba(255, 209, 102, 0.2) 45% 46%, transparent 47%);
+}
+
+.teacher-star .star-name {
+  font-size: clamp(1rem, 2vw, 1.32rem);
+  color: #fff9d7;
+  text-shadow: 0 0 12px #ffd166, 0 0 28px rgba(255, 140, 42, 0.82);
+}
+
+.star-name {
+  display: block;
+  font-family: "Be Vietnam Pro", "Exo 2", sans-serif;
+  font-weight: 900;
+  font-size: clamp(0.74rem, 1.4vw, 1rem);
+  line-height: 1.15;
+  text-transform: uppercase;
+  text-shadow: 0 0 9px #001019, 0 0 16px rgba(125, 249, 255, 0.76);
+}
+
+.star-trait {
+  display: block;
+  min-height: 18px;
+  margin-top: 4px;
+  font-size: 0.76rem;
+  opacity: 0;
+  color: #bffcff;
+  text-shadow: 0 0 12px rgba(125, 249, 255, 0.72);
+  transition: opacity 350ms ease;
+}
+
+.star-node:hover,
+.star-node:focus-visible {
+  transform: translate(-50%, -50%) scale(1.12) translateZ(var(--depth));
+  filter: drop-shadow(0 0 18px var(--color));
+}
+
+.star-node:hover .star-trait,
+.star-node:focus-visible .star-trait {
+  opacity: 1;
+}
+
+.bottom-console {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 28;
+  display: grid;
+  grid-template-columns: minmax(120px, 190px) minmax(250px, 390px) minmax(120px, 190px);
+  gap: 14px;
+  align-items: end;
+  width: min(940px, calc(100% - 24px));
+  padding: 22px 18px 12px;
+  transform: translateX(-50%) rotateX(10deg);
+  transform-origin: bottom center;
+  background: linear-gradient(180deg, rgba(11, 25, 39, 0.68), rgba(4, 9, 17, 0.96));
+  border: 1px solid rgba(125, 249, 255, 0.22);
+  border-bottom: 0;
+  clip-path: polygon(8% 0, 92% 0, 100% 35%, 100% 100%, 0 100%, 0 35%);
+  box-shadow: 0 -12px 60px rgba(0, 0, 0, 0.74), inset 0 0 30px rgba(125, 249, 255, 0.08);
+}
+
+.side-module {
+  min-height: 112px;
+  border: 1px solid rgba(125, 249, 255, 0.24);
+  background: rgba(2, 13, 25, 0.72);
+  box-shadow: inset 0 0 22px rgba(79, 166, 255, 0.12);
+}
+
+.radar-ring {
+  width: 72px;
+  height: 72px;
+  margin: 16px auto 0;
+  border: 2px solid rgba(125, 249, 255, 0.58);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 0deg, rgba(125, 249, 255, 0.5), transparent 35%),
+    repeating-radial-gradient(circle, transparent 0 10px, rgba(125, 249, 255, 0.18) 11px 12px);
+  animation: rotate 3.5s linear infinite;
+}
+
+.tiny-lines {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  padding: 12px;
+}
+
+.tiny-lines span {
+  display: block;
+  height: 4px;
+  background: rgba(125, 249, 255, 0.42);
+  box-shadow: 0 0 8px rgba(125, 249, 255, 0.5);
+}
+
+.target-display {
+  position: relative;
+  min-height: 132px;
+  padding: 24px 18px;
+  overflow: hidden;
+  text-align: center;
+  border: 1px solid rgba(125, 249, 255, 0.48);
+  background: rgba(1, 12, 24, 0.78);
+  box-shadow: 0 0 24px rgba(125, 249, 255, 0.18), inset 0 0 28px rgba(125, 249, 255, 0.12);
+}
+
+.screen-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background-image: linear-gradient(rgba(125, 249, 255, 0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(125, 249, 255, 0.22) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.target-display p,
+.target-display strong,
+.target-display small {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.target-display p {
+  margin: 0 0 7px;
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  font-weight: 900;
+  color: #bffcff;
+}
+
+.target-display strong {
+  min-height: 28px;
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  font-size: clamp(1rem, 2.4vw, 1.28rem);
+  color: #fff;
+  text-shadow: 0 0 12px rgba(125, 249, 255, 0.95);
+}
+
+.target-display small {
+  margin-top: 8px;
+  color: rgba(223, 251, 255, 0.76);
+}
+
+.console-actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 0 20px;
+}
+
+.console-button {
+  min-height: 46px;
+  border: 1px solid rgba(125, 249, 255, 0.28);
+  background: linear-gradient(180deg, rgba(20, 45, 67, 0.95), rgba(5, 13, 25, 0.95));
+  color: #dffbff;
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(125, 249, 255, 0.08);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.console-button:hover,
+.console-button:focus-visible {
+  transform: translateY(2px);
+  border-color: rgba(125, 249, 255, 0.8);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.45), 0 0 20px rgba(125, 249, 255, 0.24);
+}
+
+.button-light {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold);
+}
+
+dialog {
+  max-width: min(720px, calc(100% - 28px));
+  border: 1px solid rgba(125, 249, 255, 0.46);
+  padding: 0;
+  color: #e8fdff;
+  background: transparent;
+}
+
+dialog::backdrop {
+  background: rgba(1, 4, 10, 0.72);
+  backdrop-filter: blur(7px);
+}
+
+/* When the Black Hole panel is open, render the vortex in the dialog backdrop (top layer). */
+.blackhole-mode #utilityModal::backdrop {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(0, 0, 0, 0.88) 0 9%, rgba(0, 0, 0, 0.72) 18%, rgba(0, 0, 0, 0.22) 38%, transparent 62%),
+    conic-gradient(from 0deg at 50% 48%,
+      rgba(255, 255, 255, 0) 0deg 18deg,
+      rgba(125, 249, 255, 0.12) 22deg 30deg,
+      rgba(255, 97, 216, 0.1) 36deg 44deg,
+      rgba(255, 255, 255, 0) 50deg 78deg,
+      rgba(79, 166, 255, 0.12) 82deg 94deg,
+      rgba(255, 209, 102, 0.08) 106deg 114deg,
+      rgba(255, 255, 255, 0) 120deg 180deg,
+      rgba(125, 249, 255, 0.1) 182deg 194deg,
+      rgba(255, 97, 216, 0.08) 214deg 222deg,
+      rgba(255, 255, 255, 0) 230deg 360deg),
+    radial-gradient(circle at 50% 48%, rgba(15, 40, 70, 0.45) 0 16%, transparent 46%),
+    radial-gradient(circle at 50% 48%, rgba(255, 97, 216, 0.09), transparent 58%);
+  backdrop-filter: blur(2px);
+}
+
+dialog article {
+  position: relative;
+  padding: clamp(22px, 4vw, 34px);
+  background: linear-gradient(135deg, rgba(9, 24, 44, 0.84), rgba(17, 10, 38, 0.72));
+  backdrop-filter: blur(18px);
+  box-shadow: 0 0 44px rgba(125, 249, 255, 0.25), inset 0 0 28px rgba(255, 255, 255, 0.05);
+}
+
+.media-viewer {
+  width: min(1200px, calc(100% - 20px));
+  max-width: none;
+  max-height: none;
+  border: 1px solid rgba(125, 249, 255, 0.42);
+  padding: 0;
+}
+
+.media-viewer::backdrop {
+  background: rgba(1, 4, 10, 0.86);
+  backdrop-filter: blur(7px);
+}
+
+.media-viewer .close-button {
+  top: 14px;
+  right: 16px;
+  z-index: 2;
+}
+
+.media-stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 56px 18px 18px;
+}
+
+.media-stage img,
+.media-stage video {
+  display: block;
+  max-width: min(1120px, 100%);
+  max-height: min(78vh, 720px);
+  width: auto;
+  height: auto;
+  border: 1px solid rgba(125, 249, 255, 0.22);
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 44px rgba(125, 249, 255, 0.18);
+}
+
+.media-stage video {
+  width: min(1120px, 100%);
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(125, 249, 255, 0.42);
+  border-radius: 50%;
+  background: rgba(3, 12, 24, 0.62);
+  color: white;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-kicker {
+  margin: 0 0 8px;
+  color: var(--green);
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+dialog h2 {
+  margin: 0 40px 20px 0;
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  text-shadow: 0 0 18px rgba(125, 249, 255, 0.72);
+}
+
+.modal-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.modal-grid section,
+.utility-card {
+  padding: 16px;
+  border: 1px solid rgba(125, 249, 255, 0.22);
+  background: rgba(4, 13, 27, 0.52);
+}
+
+.modal-grid h3,
+.utility-card h3 {
+  margin: 0 0 8px;
+  color: var(--gold);
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  font-size: 0.84rem;
+  text-transform: uppercase;
+}
+
+.modal-grid p,
+.utility-card p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.utility-list {
+  display: grid;
+  gap: 12px;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.memory-item {
+  margin: 0;
+  border: 1px solid rgba(125, 249, 255, 0.22);
+  background: rgba(2, 10, 20, 0.55);
+  overflow: hidden;
+}
+
+.memory-item img,
+.memory-item video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.memory-item figcaption {
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  color: rgba(223, 251, 255, 0.82);
+  border-top: 1px solid rgba(125, 249, 255, 0.16);
+  word-break: break-word;
+}
+
+.memory-item button {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.memory-slot {
+  min-height: 96px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(125, 249, 255, 0.34);
+  background: rgba(2, 10, 20, 0.55);
+  color: rgba(223, 251, 255, 0.72);
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.stardust-form {
+  display: grid;
+  gap: 10px;
+}
+
+.stardust-form input,
+.stardust-form textarea {
+  width: 100%;
+  border: 1px solid rgba(125, 249, 255, 0.28);
+  padding: 12px;
+  background: rgba(0, 8, 18, 0.72);
+  color: white;
+}
+
+.stardust-form textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.stardust-form button,
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border: 1px solid rgba(124, 255, 178, 0.42);
+  background: rgba(20, 72, 55, 0.48);
+  color: #ddfff0;
+  font-family: "Exo 2", "Be Vietnam Pro", sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.wish-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.wish-item {
+  padding: 10px 12px;
+  border-left: 3px solid var(--pink);
+  background: rgba(255, 97, 216, 0.1);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes blackholeSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blackholeSuck {
+  0% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
+  55% {
+    transform: scale(1.08);
+    filter: blur(0.6px);
+  }
+  100% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes blackholeBackdrop {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sunPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.08);
+    filter: brightness(1.18);
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes warp {
+  0% {
+    opacity: 0;
+    transform: translateZ(0) scale(0.22) rotate(0deg);
+    filter: blur(0) brightness(1);
+  }
+  12% {
+    opacity: 0.72;
+    transform: translateZ(0) scale(0.68) rotate(4deg);
+    filter: blur(0.5px) brightness(1.18);
+  }
+  30% {
+    opacity: 1;
+    transform: translateZ(0) scale(1.7) rotate(11deg);
+    filter: blur(1.2px) brightness(1.34);
+  }
+  52% {
+    opacity: 0.98;
+    transform: translateZ(0) scale(3.35) rotate(18deg);
+    filter: blur(2.4px) brightness(1.4);
+  }
+  74% {
+    opacity: 0.68;
+    transform: translateZ(0) scale(5.7) rotate(26deg);
+    filter: blur(4.8px) brightness(1.22);
+  }
+  100% {
+    opacity: 0;
+    transform: translateZ(0) scale(8.5) rotate(34deg);
+    filter: blur(8px) brightness(1);
+  }
+}
+
+@keyframes scan {
+  0% {
+    opacity: 0;
+    transform: translateY(-110%);
+  }
+  20%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(110%);
+  }
+}
+
+@media (max-width: 860px) {
+  .window-frame {
+    display: none;
+  }
+
+  .star-map {
+    inset: 112px 0 240px;
+  }
+
+  .star-node {
+    width: 118px;
+  }
+
+  .mission-progress {
+    top: auto;
+    right: 12px;
+    bottom: 224px;
+  }
+
+  .bottom-console {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px 10px 10px;
+    clip-path: none;
+  }
+
+  .side-module {
+    display: none;
+  }
+
+  .console-actions {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 861px) {
+  .star-map {
+    bottom: 174px;
+  }
+
+  .bottom-console {
+    transform: translateX(-50%) scale(0.86) rotateX(10deg);
+    bottom: -18px;
+  }
+}
