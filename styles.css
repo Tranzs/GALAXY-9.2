@@ -801,6 +801,38 @@ dialog article {
   width: min(1120px, 100%);
 }
 
+.space-portal {
+  width: min(1280px, calc(100% - 18px));
+  max-width: none;
+  height: min(760px, calc(100vh - 18px));
+  max-height: none;
+  border: 1px solid rgba(125, 249, 255, 0.48);
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 70px rgba(125, 249, 255, 0.28);
+}
+
+.space-portal::backdrop {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(125, 249, 255, 0.18), rgba(1, 4, 10, 0.92) 58%),
+    rgba(1, 4, 10, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+.space-portal .close-button {
+  top: 14px;
+  right: 16px;
+  z-index: 2;
+}
+
+.space-portal iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .close-button {
   position: absolute;
   top: 12px;
