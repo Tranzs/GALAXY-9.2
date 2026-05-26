@@ -814,16 +814,21 @@ dialog article {
 }
 
 .space-portal::backdrop {
-  background:
-    radial-gradient(circle at 50% 50%, rgba(125, 249, 255, 0.18), rgba(1, 4, 10, 0.92) 58%),
-    rgba(1, 4, 10, 0.86);
-  backdrop-filter: blur(8px);
+  background: #000;
+  backdrop-filter: none;
 }
 
 .space-portal .close-button {
   top: 14px;
   right: 16px;
   z-index: 2;
+  opacity: 0.42;
+  transition: opacity 180ms ease;
+}
+
+.space-portal .close-button:hover,
+.space-portal .close-button:focus-visible {
+  opacity: 1;
 }
 
 .space-portal iframe {
