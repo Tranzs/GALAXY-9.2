@@ -814,10 +814,32 @@ dialog article {
   transition: opacity 260ms ease;
 }
 
+.space-portal::before,
+.space-portal::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  pointer-events: none;
+}
+
+.space-portal::before {
+  top: 0;
+  height: 96px;
+  background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 100%);
+}
+
+.space-portal::after {
+  bottom: 0;
+  height: 86px;
+  background: linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.78) 42%, transparent 100%);
+}
+
 .space-portal .close-button {
   top: 14px;
   right: 16px;
-  z-index: 2;
+  z-index: 3;
   opacity: 0.42;
   transition: opacity 180ms ease;
 }
@@ -835,10 +857,11 @@ dialog article {
 .space-portal iframe {
   position: absolute;
   inset: 50% auto auto 50%;
-  width: 177.78vh;
-  min-width: 100vw;
-  height: 100vh;
-  min-height: 56.25vw;
+  z-index: 0;
+  width: 197.78vh;
+  min-width: 112vw;
+  height: 112vh;
+  min-height: 63vw;
   border: 0;
   transform: translate(-50%, -50%);
   pointer-events: none;
