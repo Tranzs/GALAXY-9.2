@@ -802,20 +802,16 @@ dialog article {
 }
 
 .space-portal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
   width: 100vw;
-  max-width: none;
   height: 100vh;
-  max-height: none;
-  border: 0;
-  padding: 0;
   overflow: hidden;
   background: #000;
-  box-shadow: none;
-}
-
-.space-portal::backdrop {
-  background: #000;
-  backdrop-filter: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
 }
 
 .space-portal .close-button {
@@ -824,6 +820,11 @@ dialog article {
   z-index: 2;
   opacity: 0.42;
   transition: opacity 180ms ease;
+}
+
+.space-portal.active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .space-portal .close-button:hover,

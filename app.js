@@ -420,7 +420,8 @@ function openMediaViewer(src, type) {
 
 function openInfiniteSpace() {
   spacePortalFrame.src = spacePortalFrame.dataset.src;
-  spacePortal.showModal();
+  spacePortal.classList.add("active");
+  spacePortal.setAttribute("aria-hidden", "false");
 }
 
 document.querySelector("#closeStudent").addEventListener("click", closeStudentModal);
@@ -445,12 +446,17 @@ mediaViewer.addEventListener("close", () => {
   mediaStage.innerHTML = "";
 });
 
-document.querySelector("#closeSpacePortal").addEventListener("click", () => spacePortal.close());
-spacePortal.addEventListener("click", (event) => {
-  if (event.target === spacePortal) spacePortal.close();
-});
-spacePortal.addEventListener("close", () => {
+function closeInfiniteSpace() {
+  spacePortal.classList.remove("active");
+  spacePortal.setAttribute("aria-hidden", "true");
   spacePortalFrame.src = "";
+}
+
+document.querySelector("#closeSpacePortal").addEventListener("click", closeInfiniteSpace);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && spacePortal.classList.contains("active")) {
+    closeInfiniteSpace();
+  }
 });
 
 document.querySelectorAll("[data-panel]").forEach((button) => {
