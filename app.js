@@ -419,7 +419,9 @@ function openMediaViewer(src, type) {
 }
 
 function openInfiniteSpace() {
-  spacePortalFrame.src = spacePortalFrame.dataset.src;
+  if (!spacePortalFrame.src) {
+    spacePortalFrame.src = spacePortalFrame.dataset.src;
+  }
   spacePortal.classList.add("active");
   spacePortal.setAttribute("aria-hidden", "false");
 }
