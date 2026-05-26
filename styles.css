@@ -802,15 +802,15 @@ dialog article {
 }
 
 .space-portal {
-  width: min(1280px, calc(100% - 18px));
+  width: 100vw;
   max-width: none;
-  height: min(760px, calc(100vh - 18px));
+  height: 100vh;
   max-height: none;
-  border: 1px solid rgba(125, 249, 255, 0.48);
+  border: 0;
   padding: 0;
   overflow: hidden;
   background: #000;
-  box-shadow: 0 0 70px rgba(125, 249, 255, 0.28);
+  box-shadow: none;
 }
 
 .space-portal::backdrop {
@@ -827,10 +827,14 @@ dialog article {
 }
 
 .space-portal iframe {
-  display: block;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 177.78vh;
+  min-width: 100vw;
+  height: 100vh;
+  min-height: 56.25vw;
   border: 0;
+  transform: translate(-50%, -50%);
 }
 
 .close-button {
