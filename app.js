@@ -28,6 +28,7 @@ const students = [
   { name: "Chí Hiếu", x: 93, y: 63, size: 24, color: "#ffd166", shape: "arrow", trait: "The Comeback Comet", message: "When something is hard, you do not have to stop. Skip, return, and win the points you can.", future: "Target: Exam Breakthrough" },
   { name: "Bảo Châu", x: 18, y: 84, size: 26, color: "#8fb7ff", shape: "moon", trait: "The Gentle Light", message: "You have your own rhythm. Follow it, protect it, and finish the journey with pride.", future: "Target: Bright High School Years" },
   { name: "Bình Minh", x: 50, y: 88, size: 30, color: "#ffe082", shape: "sunrise", trait: "The Sunrise Signal", message: "A new morning is waiting after this exam season. Do your part today and meet it with a smile.", future: "Target: Fresh Start Coordinates" },
+  { name: "Thiện Minh", x: 76, y: 78, size: 26, color: "#a7f3d0", shape: "halo", trait: "The Chill Voyager", message: "Keep that chill energy, Thiện Minh. Stay relaxed, read with a clear head, and let every answer move at your own steady pace.", future: "Target: Calm Bright Future" },
   { name: "Future Star", x: 82, y: 84, size: 34, color: "#fff2a8", shape: "portal", trait: "The Next Discovery", message: "This space is ready for one more name, one more story, and one more shining destination.", future: "Target: To be updated" },
 ];
 
@@ -143,7 +144,7 @@ function setTarget(star) {
 }
 
 function resetTarget() {
-  targetName.textContent = "18 STAR DESTINATIONS";
+  targetName.textContent = "19 STAR DESTINATIONS";
   targetHint.textContent = "Hover a star to lock destination";
 }
 
